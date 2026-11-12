@@ -1,0 +1,35 @@
+# Template file for 'dotnet-sdk'
+pkgname=dotnet-sdk
+version=10.0.100
+revision=1
+archs="x86_64 aarch64"
+depends="icu-devel mit-krb5-libs libgcc libstdc++ libunwind openssl zlib"
+short_desc="Microsoft .NET SDK"
+maintainer="Orphaned <orphan@voidlinux.org>"
+license="MIT"
+homepage="https://dotnet.microsoft.com/"
+nostrip=yes
+
+case "$XBPS_TARGET_MACHINE" in
+	x86_64) _arch=x64 ;;
+	aarch64) _arch=arm64 ;;
+esac
+
+_disturl="https://builds.dotnet.microsoft.com/dotnet/Sdk/${version}/dotnet-sdk-${version}-linux-${_arch}.tar.gz"
+distfiles="${_disturl}"
+checksum=a9631cc6bfad0ef167383ac654b54254bad95a6fb4b6f4309fa78f558055e637
+
+do_install() {
+	vmkdir usr/lib/dotnet
+	vcopy "${wrksrc}/*" usr/lib/dotnet/
+
+	vmkdir usr/bin
+	ln -s /usr/lib/dotnet/dotnet "${DESTDIR}/usr/bin/dotnet"
+
+	vmkdir etc/profile.d
+	cat > "${DESTDIR}/etc/profile.d/dotnet.sh" <<'EOF'
+export DOTNET_ROOT=/usr/lib/dotnet
+EOF
+
+	vlicense LICENSE.txt
+}
