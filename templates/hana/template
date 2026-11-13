@@ -1,0 +1,21 @@
+# Template file for 'hana'
+pkgname=hana
+version=0.1
+revision=1
+build_style=go
+go_import_path="github.com/yukiisen/hana"
+
+hostmakedepends="go"
+
+depends=""
+short_desc="Osu Leaderboard Viewer"
+maintainer="Yuki <contact@yukiii.lol>"
+license="MIT"
+homepage="https://yukiii.lol/archive/hana"
+distfiles="https://github.com/yukiisen/hana/archive/refs/tags/${version}.tar.gz"
+checksum=e7482eed10e1c3a3c24b3ff0461fa6a5e355509cb9c2d41aa52fe0ea749537af 
+changelog="https://github.com/yukiisen/hana/releases"
+
+post_install() {
+    vlicense LICENSE
+}
