@@ -1,0 +1,14 @@
+[Desktop Entry]
+Version=1.0
+Name=PineconeMC
+Comment=Discover, manage, and play Minecraft instances
+Type=Application
+Terminal=false
+Exec=elyprismlauncher %U
+StartupNotify=true
+Icon=io.github.elyprismlauncher.ElyPrismLauncher
+Categories=Game;ActionGame;AdventureGame;Simulation;PackageManager;
+Keywords=game;minecraft;mc;
+StartupWMClass=ElyPrismLauncher
+MimeType=application/zip;application/x-modrinth-modpack+zip;x-scheme-handler/curseforge;x-scheme-handler/prismlauncher;x-scheme-handler/elyprismlauncher;
+X-AppImage-Version=11.1.1
