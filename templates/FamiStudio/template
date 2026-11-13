@@ -1,0 +1,32 @@
+# Template file for 'FamiStudio'
+pkgname=FamiStudio
+version=4.5.4
+revision=1
+archs="x86_64"
+build_style=fetch
+nopie=yes
+nostrip=yes
+
+_version=$(printf '%s' "$version" | tr -d '.')
+_archive="FamiStudio${_version}-LinuxAMD64.zip"
+distfiles="https://github.com/BleuBleu/FamiStudio/releases/download/${version}/${_archive}"
+checksum=35da2c4e1b4955db855008fc36c99595c07281bfff3231b6024ab1ec45ab8660
+
+depends="dotnet-sdk"
+short_desc="NES Music Editor"
+maintainer="Yuki <contact@yukiii.lol>"
+license="MIT"
+homepage="https://famistudio.org/"
+changelog="https://github.com/BleuBleu/FamiStudio/releases"
+
+do_install() {
+    vmkdir usr/lib/famistudio
+    bsdtar -xf "${wrksrc}/${_archive}" \
+        -C "${DESTDIR}/usr/lib/famistudio"
+
+    chmod 755 "${DESTDIR}/usr/lib/famistudio/FamiStudio"
+
+    vmkdir usr/bin
+    ln -s /usr/lib/famistudio/FamiStudio \
+        "${DESTDIR}/usr/bin/famistudio"
+}
