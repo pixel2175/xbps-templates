@@ -1,13 +1,13 @@
 # Template file for 'librewolf'
 pkgname=librewolf
-version=159.0.1
+version=160.0
 revision=1
 archs="x86_64"
 build_style=fetch
 
 _deb="librewolf-${version}-1-linux-x86_64-deb.deb"
-distfiles="https://repo.librewolf.net/pool/${_deb}"
-checksum=8f252136b41599f2af846bd6083032e2c88d1ccb043ac5e5faeffdbdfe8282b8
+distfiles="https://dl.librewolf.net/librewolf/${version}-1/${_deb}"
+checksum=65ff7f46f7b6a3d0c5ce2f6bd64d7c6a839d5c1dff76a4ec870e69f892cd789b
 
 hostmakedepends="binutils libarchive"
 depends="gtk+3 nss dbus-glib"
@@ -16,9 +16,8 @@ maintainer="Pi66 <mail@pi66.xyz>"
 license="MPL-2.0"
 homepage="https://librewolf.net/"
 changelog="https://codeberg.org/librewolf"
+_autoupdate=codeberg:librewolf/bsys6
 
-# Unpack the Debian data payload only. Debian maintainer scripts and dependency
-# metadata are not applied; review the extracted files and runtime dependencies.
 do_install() {
 	local _debdir="${wrksrc}/deb"
 	local _data
