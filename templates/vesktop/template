@@ -1,7 +1,7 @@
 # Template file for 'vesktop'
 pkgname=vesktop
 version=1.6.9
-revision=1
+revision=2
 archs="x86_64"
 build_style=fetch
 nopie=yes
@@ -17,6 +17,7 @@ maintainer="Pi66 <mail@pi66.xyz>"
 license="GPL-3.0-or-later"
 homepage="https://github.com/Vencord/Vesktop"
 changelog="https://github.com/Vencord/Vesktop/releases"
+_autoupdate=github:vencord/vesktop
 
 do_install() {
 	vmkdir "usr/lib/${pkgname}"
