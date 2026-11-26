@@ -12,6 +12,7 @@ license="GPL-3.0-only"
 homepage="https://github.com/grapedjuice/ytm-rs"
 distfiles="${homepage}/releases/download/v${version}/ytm-rs-${version}-linux-x86_64.tar.gz"
 checksum=deec141573322c99686bb85b0981bfc25381d97e209b7f084ab259420f804555
+_autoupdate=github:grapedjuice/ytm-rs
 nostrip=yes
 restricted=yes
 
