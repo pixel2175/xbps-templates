@@ -35,8 +35,7 @@ jobs:
           HEAD: ${{ github.event.pull_request.head.sha }}
         run: |
           git config --global --add safe.directory "$GITHUB_WORKSPACE"
-          git diff --name-only --diff-filter=ACMRT \
-            "${BASE:-HEAD~1}" "${HEAD:-HEAD}" |
+          git diff --name-only --diff-filter=ACMRT "${BASE}...${HEAD}" |
             awk -F/ '$1=="templates" && $3=="template" {print $2}' |
             sort -u > /tmp/pkgs
           echo "Packages:"; cat /tmp/pkgs
@@ -93,8 +92,7 @@ jobs:
           HEAD: ${{ github.event.pull_request.head.sha }}
         run: |
           git config --global --add safe.directory "$GITHUB_WORKSPACE"
-          git diff --name-only --diff-filter=ACMRT \
-            "${BASE:-HEAD~1}" "${HEAD:-HEAD}" |
+          git diff --name-only --diff-filter=ACMRT "${BASE}...${HEAD}" |
             awk -F/ '$1=="templates" && $3=="template" {print $2}' |
             sort -u > /tmp/pkgs
           echo "Packages:"; cat /tmp/pkgs
