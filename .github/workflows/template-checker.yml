@@ -15,17 +15,16 @@ jobs:
     timeout-minutes: 30
     container:
       image: ghcr.io/void-linux/void-glibc-full
-      env:
-        LICENSE_LIST: /vp/common/travis/license.lst
-
+    env:
+      LICENSE_LIST: /vp/common/travis/license.lst
     steps:
       - name: Prepare container
         run: |
-          xbps-install -Syu xbps && xbps-install -yu
-          xbps-install -y sudo bash curl git xtools nodejs
+          xbps-install -Syu xbps && xbps-install -y \
+            sudo bash curl git xtools nodejs ca-certificates
           useradd -G xbuilder -M builder
 
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v5
         with:
           fetch-depth: 0
 
@@ -36,17 +35,26 @@ jobs:
           HEAD: ${{ github.event.pull_request.head.sha }}
         run: |
           git config --global --add safe.directory "$GITHUB_WORKSPACE"
-          git diff --name-only --diff-filter=ACMRT "${BASE:-HEAD~1}" "${HEAD:-HEAD}" |
-            awk -F/ '$1=="templates" && $3=="template" {print $2}' | sort -u > /tmp/pkgs
+          git diff --name-only --diff-filter=ACMRT \
+            "${BASE:-HEAD~1}" "${HEAD:-HEAD}" |
+            awk -F/ '$1=="templates" && $3=="template" {print $2}' |
+            sort -u > /tmp/pkgs
           echo "Packages:"; cat /tmp/pkgs
-          if [ -s /tmp/pkgs ]; then echo "found=1" >> "$GITHUB_OUTPUT"; else echo "No templates changed."; fi
+          if [ -s /tmp/pkgs ]; then
+            echo "found=1" >> "$GITHUB_OUTPUT"
+          else
+            echo "No templates changed."
+          fi
 
       - name: Prepare void-packages
         if: steps.changed.outputs.found
         run: |
           git clone --depth 1 https://github.com/void-linux/void-packages /vp
-          for p in $(cat /tmp/pkgs); do cp -a "templates/$p" "/vp/srcpkgs/$p"; done
+          for p in $(cat /tmp/pkgs); do
+            cp -a "templates/$p" "/vp/srcpkgs/$p"
+          done
           chown -R builder:builder /vp
+          git config --global --add safe.directory /vp
 
       - name: Lint
         if: steps.changed.outputs.found
@@ -67,15 +75,14 @@ jobs:
       options: --privileged
       volumes:
         - /dev:/dev
-
     steps:
       - name: Prepare container
         run: |
-          xbps-install -Syu xbps && xbps-install -yu
-          xbps-install -y sudo bash curl git nodejs
+          xbps-install -Syu xbps && xbps-install -y \
+            sudo bash curl git nodejs ca-certificates
           useradd -G xbuilder -M builder
 
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v5
         with:
           fetch-depth: 0
 
@@ -86,19 +93,28 @@ jobs:
           HEAD: ${{ github.event.pull_request.head.sha }}
         run: |
           git config --global --add safe.directory "$GITHUB_WORKSPACE"
-          git diff --name-only --diff-filter=ACMRT "${BASE:-HEAD~1}" "${HEAD:-HEAD}" |
-            awk -F/ '$1=="templates" && $3=="template" {print $2}' | sort -u > /tmp/pkgs
+          git diff --name-only --diff-filter=ACMRT \
+            "${BASE:-HEAD~1}" "${HEAD:-HEAD}" |
+            awk -F/ '$1=="templates" && $3=="template" {print $2}' |
+            sort -u > /tmp/pkgs
           echo "Packages:"; cat /tmp/pkgs
-          if [ -s /tmp/pkgs ]; then echo "found=1" >> "$GITHUB_OUTPUT"; else echo "No templates changed."; fi
+          if [ -s /tmp/pkgs ]; then
+            echo "found=1" >> "$GITHUB_OUTPUT"
+          else
+            echo "No templates changed."
+          fi
 
       - name: Prepare void-packages
         if: steps.changed.outputs.found
         run: |
           git clone --depth 1 https://github.com/void-linux/void-packages /vp
-          for p in $(cat /tmp/pkgs); do cp -a "templates/$p" "/vp/srcpkgs/$p"; done
+          for p in $(cat /tmp/pkgs); do
+            cp -a "templates/$p" "/vp/srcpkgs/$p"
+          done
           echo XBPS_ALLOW_RESTRICTED=yes >> /vp/etc/conf
           echo XBPS_CHROOT_CMD=uchroot >> /vp/etc/conf
           chown -R builder:builder /vp
+          git config --global --add safe.directory /vp
 
       - name: Build
         if: steps.changed.outputs.found
